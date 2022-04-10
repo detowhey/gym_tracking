@@ -11,11 +11,11 @@ data class Customer(
     val firstName: String,
     val lastName: String,
     val email: String,
-    val address: String,
+    val password: String,
     val birthDay: String,
     val phoneNumber: String
 ) : Serializable {
     constructor(
-        id: String, firstName: String, lastName: String, email: String, address: String, birthDay: String
-    ) : this(id, firstName, lastName, email, address, birthDay, "")
+        id: String, firstName: String, lastName: String, email: String, password: String, birthDay: String
+    ) : this(id, firstName, lastName, email, password, birthDay, "")
 }

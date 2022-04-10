@@ -29,7 +29,7 @@ class GymService {
 
     fun insert(gym: Gym): Gym = repository.insert(gym)
 
-    fun delete(id: String) = repository.delete(this.findById(id))
+    fun delete(id: String) = repository.deleteById(id)
 
     fun update(gym: Gym): Gym {
         val newGymData = this.findById(gym.id)
