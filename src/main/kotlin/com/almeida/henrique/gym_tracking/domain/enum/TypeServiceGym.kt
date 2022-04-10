@@ -1,4 +1,4 @@
-package com.almeida.henrique.gym_tracking.entities.enum
+package com.almeida.henrique.gym_tracking.domain.enum
 
 enum class TypeServiceGym(val code: Int, name: String) {
 
