@@ -36,3 +36,11 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Vaadin ###
+*.json
+*.js
+*.ts
+./target
+*.html
+*.map
