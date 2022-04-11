@@ -2,12 +2,16 @@ package com.almeida.henrique.gym_tracking.domain
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
+import org.springframework.data.mongodb.core.mapping.FieldType
 import java.io.Serializable
 
 
-@Document("customer")
+@Document(collection = "customer")
 data class Customer(
-    @Id val id: String,
+    @Id
+    @Field(targetType = FieldType.OBJECT_ID)
+    val id: String,
     val firstName: String,
     val lastName: String,
     val email: String,

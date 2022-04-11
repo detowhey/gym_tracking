@@ -6,11 +6,11 @@ import org.springframework.data.mongodb.repository.Query
 
 interface CustomerRepository : MongoRepository<Customer, String> {
 
-    @Query("{id:'?0'}")
+   /* @Query("{id:'?0'}")
     fun finById(id: String): Customer
 
     @Query("{id:'?0'}")
     fun findByFirstName(firstName: String): MutableList<Customer>
 
-    fun findByLastName(lastName: String): MutableList<Customer>
+    fun findByLastName(lastName: String): MutableList<Customer>*/
 }

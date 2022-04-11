@@ -1,4 +1,4 @@
-package com.almeida.henrique.gym_tracking.resource.excepetions
+package com.almeida.henrique.gym_tracking.resource.exception
 
 import com.almeida.henrique.gym_tracking.services.exception.DataBaseException
 import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
