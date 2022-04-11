@@ -19,7 +19,8 @@ class GymResource {
 
     @GetMapping(value = ["/gym"])
     fun findAll(): ResponseEntity<List<GymDTO>> {
-        return ResponseEntity.ok().body(service.findAll().stream().map { GymDTO(it) }.collect(Collectors.toList()))
+        return ResponseEntity.ok()
+            .body(service.findAll().stream().map { GymDTO(it) }.collect(Collectors.toList()))
     }
 
     @GetMapping(value = ["/gym/{id}"])
@@ -32,7 +33,8 @@ class GymResource {
         var gym = service.fromDTO(gymDTO)
         gym.id = ObjectId.get().toString()
         gym = service.insert(gym)
-        val uri: URI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(gym.id).toUri()
+        val uri: URI = ServletUriComponentsBuilder
+            .fromCurrentRequest().path("{/id}").buildAndExpand(gym.id).toUri()
         return ResponseEntity.created(uri).body(gymDTO)
     }
 

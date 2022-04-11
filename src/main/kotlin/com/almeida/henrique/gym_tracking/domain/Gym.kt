@@ -20,6 +20,10 @@ data class Gym(
     @NotBlank
     @Size(max = 100)
     var address: String,
+    @NotBlank
+    @Size(max = 100)
     var openingHours: String,
+    @NotBlank
+    @Size(max = 100)
     var phoneNumber: String
 ) : Serializable
