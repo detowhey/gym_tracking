@@ -11,26 +11,13 @@ import javax.validation.constraints.Size
 
 class CustomerDTO(customer: Customer) : Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Field(targetType = FieldType.OBJECT_ID)
     val id: String = customer.id
-
-    @NotBlank
-    @Size(max = 100)
     val firstName: String = customer.firstName
-
-    @NotBlank
-    @Size(max = 100)
     val lastName: String = customer.lastName
-
-    @NotBlank
-    @Size(max = 100)
     val email: String = customer.email
 
     @JsonIgnore
     val password: String = customer.password
-
-    @NotBlank
-    @Size(max = 10)
     val birthDay: String = customer.birthDay
     val phoneNumber: String = customer.phoneNumber
 

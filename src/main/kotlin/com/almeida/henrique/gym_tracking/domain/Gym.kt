@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.FieldType
 import java.io.Serializable
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
-import kotlin.math.max
 
 @Document(collection = "gym")
 data class Gym(
