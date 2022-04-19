@@ -10,7 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Service
+@Service("gymService")
 class GymService {
 
     @Autowired

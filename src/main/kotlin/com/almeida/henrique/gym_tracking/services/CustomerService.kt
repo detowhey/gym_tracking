@@ -7,14 +7,18 @@ import com.almeida.henrique.gym_tracking.services.exception.ObjectNotFoundExcept
 import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Service
+@Service("customerService")
 class CustomerService {
 
     @Autowired
     private lateinit var repository: CustomerRepository
+
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     fun findAll(): List<Customer> = repository.findAll()
 
@@ -42,7 +46,7 @@ class CustomerService {
     fun fromDTO(customerDTO: CustomerDTO): Customer {
         return Customer(
             customerDTO.id, customerDTO.firstName, customerDTO.lastName, customerDTO.email,
-            customerDTO.password, customerDTO.birthDay, customerDTO.phoneNumber
+            passwordEncoder.encode(customerDTO.password), customerDTO.birthDay, customerDTO.phoneNumber
         )
     }
 
@@ -50,7 +54,7 @@ class CustomerService {
         newCustomer.firstName = customer.firstName
         newCustomer.lastName = customer.lastName
         newCustomer.email = customer.email
-        newCustomer.password = customer.password
+        newCustomer.password = passwordEncoder.encode(customer.password)
         newCustomer.birthDay = customer.birthDay
         newCustomer.phoneNumber = customer.phoneNumber
     }

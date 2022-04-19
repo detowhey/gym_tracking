@@ -17,15 +17,15 @@ class ResourceExpectionHandler {
         exception: ResourceNotFoundException,
         request: HttpServletRequest
     ): ResponseEntity<StandardError> {
-        return responseEntity(HttpStatus.NOT_FOUND, exception, request, "Resource not found")
+        return responseErrorEntity(HttpStatus.NOT_FOUND, exception, request, "Resource not found")
     }
 
     @ExceptionHandler(DataBaseException::class)
     fun dataBase(exception: DataBaseException, request: HttpServletRequest): ResponseEntity<StandardError> {
-        return responseEntity(HttpStatus.BAD_REQUEST, exception, request, "Database error")
+        return responseErrorEntity(HttpStatus.BAD_REQUEST, exception, request, "Database error")
     }
 
-    private fun responseEntity(
+    private fun responseErrorEntity(
         httpStatus: HttpStatus,
         exception: RuntimeException,
         request: HttpServletRequest,
