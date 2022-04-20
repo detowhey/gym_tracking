@@ -7,6 +7,7 @@ import com.almeida.henrique.gym_tracking.services.exception.ObjectNotFoundExcept
 import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.data.domain.Sort
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -20,16 +21,20 @@ class CustomerService {
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder
 
-    fun findAll(): List<Customer> = repository.findAll()
+    fun findAll(): List<Customer> = repository.findAll(this.sortBy(secondProperty = "lastName"))
 
     fun findById(id: String): Customer {
         val optional: Optional<Customer> = repository.findById(id)
         return optional.orElseThrow { ObjectNotFoundException() }
     }
 
-    fun findByFirstNameRegex(firstName: String?): List<Customer> = repository.findByFirstNameRegex(firstName)
+    fun findByFirstNameRegex(firstName: String?): List<Customer> {
+        return repository.findByFirstNameRegex(firstName, this.sortBy())
+    }
 
-    fun findByFullNameRegex(firstName: String?, lastName: String?) : List<Customer> = repository.findByFullNameRegex(firstName, lastName)
+    fun findByFullNameRegex(firstName: String?, lastName: String?): List<Customer> {
+        return repository.findByFullNameRegex(firstName, lastName, this.sortBy(secondProperty = "lastName"))
+    }
 
     fun insert(customer: Customer): Customer = repository.insert(customer)
 
@@ -62,4 +67,10 @@ class CustomerService {
         newCustomer.birthDay = customer.birthDay
         newCustomer.phoneNumber = customer.phoneNumber
     }
+
+    private fun sortBy(firstProperty: String = "firstName", secondProperty: String): Sort {
+        return Sort.by(Sort.Direction.ASC, firstProperty, secondProperty)
+    }
+
+    private fun sortBy(firstProperty: String = "firstName"): Sort = Sort.by(Sort.Direction.ASC, firstProperty)
 }
