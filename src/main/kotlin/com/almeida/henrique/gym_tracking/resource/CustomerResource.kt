@@ -1,8 +1,8 @@
 package com.almeida.henrique.gym_tracking.resource
 
+import com.almeida.henrique.gym_tracking.domain.Customer
 import com.almeida.henrique.gym_tracking.dto.CustomerDTO
 import com.almeida.henrique.gym_tracking.services.CustomerService
-import com.mongodb.lang.Nullable
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -15,27 +15,32 @@ import kotlin.streams.toList
 @RequestMapping("/api/v1")
 class CustomerResource {
 
+    companion object {
+        private const val RESOURCE = "/customer"
+    }
+
     @Autowired
     private lateinit var service: CustomerService
 
-    @GetMapping("/customer")
-    fun findAll(): ResponseEntity<List<CustomerDTO>> {
-        return ResponseEntity.ok()
-            .body(service.findAll().stream().map { CustomerDTO(it) }.toList())
-    }
-
-    @GetMapping("/customer/{id}")
+    @GetMapping("$RESOURCE/{id}")
     fun findById(@PathVariable id: String): ResponseEntity<CustomerDTO> {
         return ResponseEntity.ok().body(CustomerDTO(service.findById(id)))
     }
 
-    @GetMapping("/customer/find")
-    fun findByFirstNameRegex(@RequestParam firstname: String): ResponseEntity<List<CustomerDTO>> {
-        return ResponseEntity.ok()
-            .body(service.findByFirstNameRegex(firstname).stream().map { CustomerDTO(it) }.toList())
+    @GetMapping(RESOURCE)
+    fun findByFirstNameOrFullName(
+        @RequestParam(required = false) firstName: String?,
+        @RequestParam(required = false) lastName: String?
+    ): ResponseEntity<List<CustomerDTO>> {
+        return if ((firstName.isNullOrEmpty() || firstName.isNullOrBlank()) && (lastName.isNullOrEmpty() || lastName.isNullOrBlank()))
+            ResponseEntity.ok().body(this.listCustomerToListDto(service.findAll()))
+        else if (lastName.isNullOrEmpty() || lastName.isNullOrBlank())
+            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFirstNameRegex(firstName)))
+        else
+            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFullNameRegex(firstName, lastName)))
     }
 
-    @PostMapping("/customer")
+    @PostMapping(RESOURCE)
     fun insert(@RequestBody customerDTO: CustomerDTO): ResponseEntity<CustomerDTO> {
         var customer = service.fromDTO(customerDTO)
         customer.id = ObjectId.get().toString()
@@ -45,17 +50,21 @@ class CustomerResource {
         return ResponseEntity.created(uri).body(customerDTO)
     }
 
-    @DeleteMapping("/customer/{id}")
+    @DeleteMapping("$RESOURCE/{id}")
     fun delete(@PathVariable id: String): ResponseEntity<String> {
         service.delete(id)
         return ResponseEntity.ok().body("Customer successfully deleted: id $id")
     }
 
-    @PutMapping(value = ["/customer/{id}"])
+    @PutMapping("$RESOURCE/{id}")
     fun update(@RequestBody customerDTO: CustomerDTO, @PathVariable id: String): ResponseEntity<CustomerDTO> {
         val customer = service.fromDTO(customerDTO)
         customer.id = id
         service.update(customer)
         return ResponseEntity.ok().body(customerDTO)
+    }
+
+    private fun listCustomerToListDto(listCustomer: List<Customer>): List<CustomerDTO> {
+        return listCustomer.stream().map { CustomerDTO(it) }.toList()
     }
 }

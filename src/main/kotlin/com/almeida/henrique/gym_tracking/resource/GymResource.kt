@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.util.stream.Collectors
+import kotlin.streams.toList
 
 @RestController
 @RequestMapping("/api/v1")
@@ -17,18 +18,18 @@ class GymResource {
     @Autowired
     private lateinit var service: GymService
 
-    @GetMapping(value = ["/gym"])
+    @GetMapping("/gym")
     fun findAll(): ResponseEntity<List<GymDTO>> {
         return ResponseEntity.ok()
-            .body(service.findAll().stream().map { GymDTO(it) }.collect(Collectors.toList()))
+            .body(service.findAll().stream().map { GymDTO(it) }.toList())
     }
 
-    @GetMapping(value = ["/gym/{id}"])
+    @GetMapping("/gym/{id}")
     fun finbById(@PathVariable id: String): ResponseEntity<GymDTO> {
         return ResponseEntity.ok().body(GymDTO(service.findById(id)))
     }
 
-    @PostMapping(value = ["/gym"])
+    @PostMapping("/gym")
     fun insert(@RequestBody gymDTO: GymDTO): ResponseEntity<GymDTO> {
         var gym = service.fromDTO(gymDTO)
         gym.id = ObjectId.get().toString()
@@ -38,13 +39,13 @@ class GymResource {
         return ResponseEntity.created(uri).body(gymDTO)
     }
 
-    @DeleteMapping(value = ["/gym/{id}"])
+    @DeleteMapping("/gym/{id}")
     fun delete(@PathVariable id: String): ResponseEntity<String> {
         service.delete(id)
         return ResponseEntity.ok().body("Gym successfully deleted: id $id")
     }
 
-    @PutMapping(value = ["/gym/{id}"])
+    @PutMapping("/gym/{id}")
     fun update(@RequestBody gymDTO: GymDTO, @PathVariable id: String): ResponseEntity<GymDTO> {
         val gym = service.fromDTO(gymDTO)
         gym.id = id
