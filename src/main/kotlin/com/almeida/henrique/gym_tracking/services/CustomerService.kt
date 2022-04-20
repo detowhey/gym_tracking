@@ -27,6 +27,8 @@ class CustomerService {
         return optional.orElseThrow { ObjectNotFoundException() }
     }
 
+    fun findByFirstNameRegex(firstName: String): List<Customer> = repository.findByFirstNameRegex(firstName)
+
     fun insert(customer: Customer): Customer = repository.insert(customer)
 
     fun delete(id: String) {

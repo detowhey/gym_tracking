@@ -2,13 +2,14 @@ package com.almeida.henrique.gym_tracking.resource
 
 import com.almeida.henrique.gym_tracking.dto.CustomerDTO
 import com.almeida.henrique.gym_tracking.services.CustomerService
+import com.mongodb.lang.Nullable
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
-import java.util.stream.Collectors
+import kotlin.streams.toList
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,12 +21,18 @@ class CustomerResource {
     @GetMapping("/customer")
     fun findAll(): ResponseEntity<List<CustomerDTO>> {
         return ResponseEntity.ok()
-            .body(service.findAll().stream().map { CustomerDTO(it) }.collect(Collectors.toList()))
+            .body(service.findAll().stream().map { CustomerDTO(it) }.toList())
     }
 
     @GetMapping("/customer/{id}")
     fun findById(@PathVariable id: String): ResponseEntity<CustomerDTO> {
         return ResponseEntity.ok().body(CustomerDTO(service.findById(id)))
+    }
+
+    @GetMapping("/customer/find")
+    fun findByFirstNameRegex(@RequestParam firstname: String): ResponseEntity<List<CustomerDTO>> {
+        return ResponseEntity.ok()
+            .body(service.findByFirstNameRegex(firstname).stream().map { CustomerDTO(it) }.toList())
     }
 
     @PostMapping("/customer")
