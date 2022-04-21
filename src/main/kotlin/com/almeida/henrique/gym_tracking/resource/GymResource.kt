@@ -2,6 +2,7 @@ package com.almeida.henrique.gym_tracking.resource
 
 import com.almeida.henrique.gym_tracking.dto.GymDTO
 import com.almeida.henrique.gym_tracking.services.GymService
+import io.swagger.annotations.Api
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -13,6 +14,7 @@ import kotlin.streams.toList
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(value = "Gym", description = "Gym related operations")
 class GymResource {
 
     @Autowired

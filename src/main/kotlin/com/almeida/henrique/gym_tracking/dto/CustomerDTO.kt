@@ -3,8 +3,10 @@ package com.almeida.henrique.gym_tracking.dto
 import com.almeida.henrique.gym_tracking.domain.Customer
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import springfox.documentation.annotations.ApiIgnore
 import java.io.Serializable
 
+@ApiIgnore
 class CustomerDTO(customer: Customer) : Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val id: String = customer.id
