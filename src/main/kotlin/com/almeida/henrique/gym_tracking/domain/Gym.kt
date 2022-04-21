@@ -14,6 +14,8 @@ data class Gym(
     @Field(targetType = FieldType.OBJECT_ID)
     var id: String,
     @NotBlank
+    var email: String,
+    @NotBlank
     var password: String,
     @NotBlank
     @Size(max = 100)
@@ -26,5 +28,7 @@ data class Gym(
     var openingHours: String,
     @NotBlank
     @Size(max = 100)
-    var phoneNumber: String
+    var phoneNumber: String,
+    @NotBlank
+    var monthlyPayment: Double
 ) : Serializable

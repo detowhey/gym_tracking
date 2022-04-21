@@ -43,7 +43,6 @@ class CustomerService {
         try {
             val id = this.findByEmail(customer.email).id
             val optional: Optional<Customer> = repository.findById(id)
-
             if (!optional.isEmpty) return repository.insert(customer) else throw ObjectNotFoundException()
         } catch (e: DataBaseException) {
             throw DataBaseException("Database not connect")
@@ -67,8 +66,13 @@ class CustomerService {
 
     fun fromDTO(customerDTO: CustomerDTO): Customer {
         return Customer(
-            customerDTO.id, customerDTO.firstName, customerDTO.lastName, customerDTO.email,
-            passwordEncoder.encode(customerDTO.password), customerDTO.birthDay, customerDTO.phoneNumber
+            customerDTO.id,
+            customerDTO.firstName,
+            customerDTO.lastName,
+            customerDTO.email,
+            passwordEncoder.encode(customerDTO.password),
+            customerDTO.birthDay,
+            customerDTO.phoneNumber
         )
     }
 

@@ -123,7 +123,7 @@ class CustomerResource {
             mapOf(
                 "id" to id,
                 "message" to "Customer successfully updated",
-                "status" to 201
+                "status" to 200
             )
         )
     }

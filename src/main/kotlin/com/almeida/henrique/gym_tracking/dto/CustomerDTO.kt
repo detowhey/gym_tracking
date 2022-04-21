@@ -23,8 +23,8 @@ data class CustomerDTO(@ApiModelProperty(hidden = true) val customer: Customer) 
     @ApiModelProperty(position = 3, example = "example@email.com", required = true)
     val email: String = customer.email
 
-    @JsonIgnore
     @ApiModelProperty(required = true, hidden = true)
+    @JsonIgnore
     val password: String = customer.password
 
     @ApiModelProperty(position = 4, example = "dd/mm/yyyy", required = true)
