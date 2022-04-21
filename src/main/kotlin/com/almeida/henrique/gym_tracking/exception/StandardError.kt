@@ -1,4 +1,4 @@
-package com.almeida.henrique.gym_tracking.resource.exception
+package com.almeida.henrique.gym_tracking.exception
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.io.Serializable

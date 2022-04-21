@@ -1,7 +1,5 @@
-package com.almeida.henrique.gym_tracking.resource.exception
+package com.almeida.henrique.gym_tracking.exception
 
-import com.almeida.henrique.gym_tracking.services.exception.DataBaseException
-import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -23,6 +21,16 @@ class ResourceExpectionHandler {
     @ExceptionHandler(DataBaseException::class)
     fun dataBase(exception: DataBaseException, request: HttpServletRequest): ResponseEntity<StandardError> {
         return responseErrorEntity(HttpStatus.BAD_REQUEST, exception, request, "Database error")
+    }
+
+    @ExceptionHandler(ObjectRegistredExpection::class)
+    fun registredObject(exception: DataBaseException, request: HttpServletRequest): ResponseEntity<StandardError> {
+        return responseErrorEntity(
+            HttpStatus.BAD_REQUEST,
+            exception,
+            request,
+            "Object already registered with this email"
+        )
     }
 
     private fun responseErrorEntity(

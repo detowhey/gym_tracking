@@ -3,8 +3,8 @@ package com.almeida.henrique.gym_tracking.services
 import com.almeida.henrique.gym_tracking.domain.Gym
 import com.almeida.henrique.gym_tracking.dto.GymDTO
 import com.almeida.henrique.gym_tracking.repositories.GymRepository
-import com.almeida.henrique.gym_tracking.services.exception.ObjectNotFoundException
-import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
+import com.almeida.henrique.gym_tracking.exception.ObjectNotFoundException
+import com.almeida.henrique.gym_tracking.exception.ResourceNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package com.almeida.henrique.gym_tracking.services.exception
+package com.almeida.henrique.gym_tracking.exception
 
 class ObjectNotFoundException(message: String = "Object not found") : RuntimeException(message) {
     companion object {

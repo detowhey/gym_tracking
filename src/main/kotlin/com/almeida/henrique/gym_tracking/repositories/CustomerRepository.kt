@@ -10,14 +10,16 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CustomerRepository : MongoRepository<Customer, String> {
 
-    @Query("{'firstName':{\$regex: ?0, \$options: 'i'}}")
+    @Query("{'firstName':{\$regex: ?0, \$options: 'i' }}")
     fun findByFirstNameRegex(@Param("firstName") name: String?, sort: Sort): List<Customer>
 
-    @Query("{'firstName': {\$regex: ?0, \$options: 'i'}, 'lastName': {\$regex: ?1, \$options: 'i'}}")
+    @Query("{'firstName': {\$regex: ?0, \$options: 'i'}, 'lastName': {\$regex: ?1, \$options: 'i' }}")
     fun findByFullNameRegex(
         @Param("firstName") firstName: String?,
         @Param("lastName") lastName: String?,
         sort: Sort
     ): List<Customer>
 
+    @Query("{'email': ?0 }")
+    fun findByEmail(@Param("email") email: String?): Customer
 }

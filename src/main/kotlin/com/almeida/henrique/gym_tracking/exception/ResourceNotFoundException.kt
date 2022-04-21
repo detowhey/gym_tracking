@@ -1,4 +1,4 @@
-package com.almeida.henrique.gym_tracking.services.exception
+package com.almeida.henrique.gym_tracking.exception
 
 class ResourceNotFoundException(id: Any) : RuntimeException("Resource not found. Id $id") {
     companion object {
