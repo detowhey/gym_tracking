@@ -3,6 +3,7 @@ package com.almeida.henrique.gym_tracking.services
 import com.almeida.henrique.gym_tracking.domain.Customer
 import com.almeida.henrique.gym_tracking.dto.CustomerDTO
 import com.almeida.henrique.gym_tracking.repositories.CustomerRepository
+import com.almeida.henrique.gym_tracking.services.exception.DataBaseException
 import com.almeida.henrique.gym_tracking.services.exception.ObjectNotFoundException
 import com.almeida.henrique.gym_tracking.services.exception.ResourceNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,10 +37,17 @@ class CustomerService {
         return repository.findByFullNameRegex(firstName, lastName, this.sortBy(secondProperty = "lastName"))
     }
 
-    fun insert(customer: Customer): Customer = repository.insert(customer)
+    fun insert(customer: Customer): Customer {
+        try {
+            return repository.insert(customer)
+        } catch (e: DataBaseException) {
+            throw DataBaseException("Database not connect")
+        }
+    }
 
     fun delete(id: String) {
         try {
+            this.findById(id)
             repository.deleteById(id)
         } catch (e: EmptyResultDataAccessException) {
             throw ResourceNotFoundException(id)

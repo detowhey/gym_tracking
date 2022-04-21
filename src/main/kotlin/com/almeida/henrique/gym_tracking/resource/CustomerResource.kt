@@ -6,6 +6,8 @@ import com.almeida.henrique.gym_tracking.services.CustomerService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -16,7 +18,7 @@ import kotlin.streams.toList
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Customer", description = "Customer related operations")
+@Api(value = "/customer", tags = ["Customer"])
 class CustomerResource {
 
     companion object {
@@ -27,29 +29,33 @@ class CustomerResource {
     @Autowired
     private lateinit var service: CustomerService
 
-    @ApiOperation("Return just one customer")
     @GetMapping("$RESOURCE/{id}", produces = [APPLICATION_JSON])
+    @ApiOperation("Return just one customer")
     fun findById(@PathVariable id: String): ResponseEntity<CustomerDTO> {
         return ResponseEntity.ok().body(CustomerDTO(service.findById(id)))
     }
 
-    @ApiOperation("Returns a list of customers")
+
     @GetMapping(RESOURCE, produces = [APPLICATION_JSON])
+    @ApiOperation(value = "Returns a list of customers")
+    @ApiResponses(
+        ApiResponse(code = 200, message = "Found customers", response = CustomerDTO::class, responseContainer = "List")
+    )
     fun findByFirstNameOrFullName(
-        @ApiParam(value = "First name of customer", example = "eder")
-        @RequestParam(required = false) firstName: String?,
-        @ApiParam(value = "Last name of customer", example = "jofre")
-        @RequestParam(required = false) lastName: String?
+        @ApiParam(value = "First name of customer", example = "eder", required = false)
+        @RequestParam(required = false) firstname: String?,
+        @ApiParam(value = "Last name of customer", example = "jofre", required = false)
+        @RequestParam(required = false) lastname: String?
     ): ResponseEntity<List<CustomerDTO>> {
-        return if ((firstName.isNullOrEmpty() || firstName.isNullOrBlank()) && (lastName.isNullOrEmpty() || lastName.isNullOrBlank()))
+        return if ((firstname.isNullOrEmpty() || firstname.isBlank()) && (lastname.isNullOrEmpty() || lastname.isBlank()))
             ResponseEntity.ok().body(this.listCustomerToListDto(service.findAll()))
-        else if (lastName.isNullOrEmpty() || lastName.isNullOrBlank())
-            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFirstNameRegex(firstName)))
+        else if (lastname.isNullOrEmpty() || lastname.isBlank())
+            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFirstNameRegex(firstname)))
         else
-            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFullNameRegex(firstName, lastName)))
+            ResponseEntity.ok().body(this.listCustomerToListDto(service.findByFullNameRegex(firstname, lastname)))
     }
 
-    @ApiOperation("Register a customer")
+    @ApiOperation("Register a customer", code = 201, response = CustomerDTO::class)
     @PostMapping(RESOURCE, produces = [APPLICATION_JSON], consumes = [APPLICATION_JSON])
     fun insertCustomer(@RequestBody customerDTO: CustomerDTO): ResponseEntity<CustomerDTO> {
         var customer = service.fromDTO(customerDTO)
@@ -61,19 +67,36 @@ class CustomerResource {
     }
 
     @ApiOperation("Delete customer record")
-    @DeleteMapping("$RESOURCE/{id}", consumes = [APPLICATION_JSON])
-    fun deleteCustomer(@PathVariable id: String): ResponseEntity<String> {
+    @DeleteMapping("$RESOURCE/{id}", produces = [APPLICATION_JSON])
+    fun deleteCustomer(@PathVariable id: String): ResponseEntity<Map<String, Any>> {
         service.delete(id)
-        return ResponseEntity.ok().body("Customer successfully deleted: id $id")
+        return ResponseEntity.ok()
+            .body(
+                mapOf(
+                    "id" to id,
+                    "message" to "Customer successfully deleted",
+                    "status" to 200
+                )
+            )
     }
 
     @ApiOperation("Update customer record")
-    @PutMapping("$RESOURCE/{id}", produces = [APPLICATION_JSON], consumes = [APPLICATION_JSON])
-    fun updateCustomer(@RequestBody customerDTO: CustomerDTO, @PathVariable id: String): ResponseEntity<CustomerDTO> {
+    @PutMapping("$RESOURCE/{id}", consumes = [APPLICATION_JSON], produces = [APPLICATION_JSON])
+    fun updateCustomer(
+        @RequestBody customerDTO: CustomerDTO,
+        @PathVariable id: String
+    ): ResponseEntity<Map<String, Any>> {
         val customer = service.fromDTO(customerDTO)
         customer.id = id
         service.update(customer)
-        return ResponseEntity.ok().body(customerDTO)
+
+        return ResponseEntity.ok().body(
+            mapOf(
+                "id" to id,
+                "message" to "Customer successfully updated",
+                "status" to 201
+            )
+        )
     }
 
     private fun listCustomerToListDto(listCustomer: List<Customer>): List<CustomerDTO> {

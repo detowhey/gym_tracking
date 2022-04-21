@@ -44,3 +44,5 @@ out/
 ./target
 *.html
 *.map
+./frontend
+src/main/resources/vaadin-featureflags.properties
