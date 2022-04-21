@@ -14,6 +14,8 @@ data class Gym(
     @Field(targetType = FieldType.OBJECT_ID)
     var id: String,
     @NotBlank
+    var password: String,
+    @NotBlank
     @Size(max = 100)
     var name: String,
     @NotBlank

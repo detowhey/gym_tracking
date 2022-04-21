@@ -45,7 +45,7 @@ class CustomerResource {
     @ApiResponse(code = 200, message = "Ok", response = CustomerDTO::class, responseContainer = "Map")
     fun findByEmail(
         @RequestParam(required = true)
-        @ApiParam("Email of customer", example = "example@email.com", required = true)
+        @ApiParam(value = "Email of customer", example = "example@email.com", required = true)
         email: String
     ) = ResponseEntity.ok().body(CustomerDTO(service.findByEmail(email)))
 
@@ -55,11 +55,11 @@ class CustomerResource {
         ApiResponse(code = 200, message = "Found customers", response = CustomerDTO::class, responseContainer = "List")
     )
     fun findByFirstNameOrFullName(
+        @RequestParam(required = false)
         @ApiParam(value = "First name of customer", example = "eder", required = false)
-        @RequestParam(required = false)
         firstname: String?,
-        @ApiParam(value = "Last name of customer", example = "jofre", required = false)
         @RequestParam(required = false)
+        @ApiParam(value = "Last name of customer", example = "jofre", required = false)
         lastname: String?,
     ): ResponseEntity<List<CustomerDTO>> {
         return if ((firstname.isNullOrEmpty() || firstname.isBlank()) && (lastname.isNullOrEmpty() || lastname.isBlank()))
