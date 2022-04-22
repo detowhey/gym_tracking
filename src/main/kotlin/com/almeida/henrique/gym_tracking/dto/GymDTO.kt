@@ -8,18 +8,18 @@ import io.swagger.annotations.ApiModelProperty
 import java.io.Serializable
 
 @ApiModel(value = "Gym")
-data class GymDTO(@ApiModelProperty(hidden = true) val gym: Gym) : Serializable {
+class GymDTO(gym: Gym) : Serializable {
 
     @ApiModelProperty(position = 0, example = "4e4eeb3948198f4fdf3bfbb46a67aaa077e5f82a", required = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val id: String = gym.id
 
+    @ApiModelProperty(position = 1, example = "gym@email.com", required = true)
+    val email: String = gym.email
+
     @ApiModelProperty(required = true, hidden = true)
     @JsonIgnore
     val password: String = gym.password
-
-    @ApiModelProperty(position = 1, example = "gym@email.com", required = true)
-    val email:String = gym.email
 
     @ApiModelProperty(position = 2, example = "Temple Gym", required = true)
     val name: String = gym.name

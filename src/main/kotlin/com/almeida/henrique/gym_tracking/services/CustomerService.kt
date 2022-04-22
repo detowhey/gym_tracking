@@ -4,6 +4,7 @@ import com.almeida.henrique.gym_tracking.domain.Customer
 import com.almeida.henrique.gym_tracking.dto.CustomerDTO
 import com.almeida.henrique.gym_tracking.exception.DataBaseException
 import com.almeida.henrique.gym_tracking.exception.ObjectNotFoundException
+import com.almeida.henrique.gym_tracking.exception.ObjectRegistredExpection
 import com.almeida.henrique.gym_tracking.exception.ResourceNotFoundException
 import com.almeida.henrique.gym_tracking.repositories.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,13 +38,16 @@ class CustomerService {
         return repository.findByFullNameRegex(firstName, lastName, this.sortBy(secondProperty = "lastName"))
     }
 
-    fun findByEmail(email: String?): Customer = repository.findByEmail(email)
+    fun findByEmail(email: String?): List<Customer> = repository.findByEmail(email)
 
     fun insert(customer: Customer): Customer {
         try {
-            val id = this.findByEmail(customer.email).id
-            val optional: Optional<Customer> = repository.findById(id)
-            if (!optional.isEmpty) return repository.insert(customer) else throw ObjectNotFoundException()
+            val listCustomers = this.findByEmail(customer.email)
+
+            if (listCustomers.isEmpty())
+                return repository.insert(customer)
+            else
+                throw ObjectRegistredExpection()
         } catch (e: DataBaseException) {
             throw DataBaseException("Database not connect")
         }

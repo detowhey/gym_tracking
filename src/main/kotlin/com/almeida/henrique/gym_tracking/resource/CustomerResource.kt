@@ -40,21 +40,21 @@ class CustomerResource {
         @PathVariable id: String
     ): ResponseEntity<CustomerDTO> = ResponseEntity.ok().body(CustomerDTO(service.findById(id)))
 
-    @GetMapping("$RESOURCE/email", produces = [APPLICATION_JSON])
+    /*@GetMapping("$RESOURCE/email", produces = [APPLICATION_JSON])
     @ApiOperation(value = "Returns the customer with this email")
     @ApiResponse(code = 200, message = "Ok", response = CustomerDTO::class, responseContainer = "Map")
     fun findByEmail(
         @RequestParam(required = true)
         @ApiParam(value = "Email of customer", example = "example@email.com", required = true)
         email: String
-    ) = ResponseEntity.ok().body(CustomerDTO(service.findByEmail(email)))
+    ) = ResponseEntity.ok().body(CustomerDTO(service.findByEmail(email)))*/
 
     @GetMapping(RESOURCE, produces = [APPLICATION_JSON])
     @ApiOperation(value = "Returns a list of customers")
     @ApiResponses(
         ApiResponse(code = 200, message = "Found customers", response = CustomerDTO::class, responseContainer = "List")
     )
-    fun findByFirstNameOrFullName(
+    fun findCustomers(
         @RequestParam(required = false)
         @ApiParam(value = "First name of customer", example = "eder", required = false)
         firstname: String?,
@@ -86,7 +86,7 @@ class CustomerResource {
 
     @DeleteMapping("$RESOURCE/{id}", produces = [APPLICATION_JSON])
     @ApiOperation(value = "Delete a customer through their id")
-    @ApiResponse(code = 200, message = "Customer successfully deleted", response = Unit::class)
+    @ApiResponse(code = 200, message = "Customer successfully deleted", response = Any::class)
     fun deleteCustomer(
         @ApiParam(
             value = "Id of customer account",
@@ -108,7 +108,7 @@ class CustomerResource {
     @PutMapping("$RESOURCE/{id}", consumes = [APPLICATION_JSON], produces = [APPLICATION_JSON])
     @ApiOperation(value = "Updates a customer through their id")
     @ApiResponse(
-        code = 200, message = "Ok", response = Unit::class
+        code = 200, message = "Ok", response = Any::class
     )
     fun updateCustomer(
         @RequestBody customerDTO: CustomerDTO,

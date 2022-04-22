@@ -14,7 +14,7 @@ import kotlin.streams.toList
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value = "Gym", description = "Gym related operations")
+@Api(value = "Gym", tags = ["Gym"])
 class GymResource {
 
     companion object {
@@ -26,9 +26,40 @@ class GymResource {
     private lateinit var service: GymService
 
     @GetMapping(RESOURCE, produces = [APPLICATION_JSON])
-    fun findAll(): ResponseEntity<List<GymDTO>> {
-        return ResponseEntity.ok()
-            .body(service.findAll().stream().map { GymDTO(it) }.toList())
+    @ApiOperation(value = "Returns a list of gyms")
+    @ApiResponses(
+        ApiResponse(code = 200, message = "Found gyms", response = GymDTO::class, responseContainer = "List")
+    )
+    fun findGyms(
+        @RequestParam(required = false)
+        @ApiParam(value = "Name's gym", example = "Temple Gym", required = false)
+        name: String?,
+        @RequestParam(required = false)
+        @ApiParam(value = "Gym opening hours", example = "08:00-23:00", required = false)
+        gymOpeningTime: String?,
+    ): ResponseEntity<List<GymDTO>> {
+        return if ((name.isNullOrEmpty() || name.isBlank()) && (gymOpeningTime.isNullOrEmpty() || gymOpeningTime.isBlank()))
+            ResponseEntity.ok().body(this.listGymToListDto(service.findAll()))
+        else if ((gymOpeningTime.isNullOrEmpty() || gymOpeningTime.isBlank()))
+            ResponseEntity.ok().body(this.listGymToListDto(service.findByName(name)))
+        else if (name.isNullOrEmpty() || name.isBlank())
+            ResponseEntity.ok(this.listGymToListDto(service.findByOpeningHours(gymOpeningTime)))
+        else
+            ResponseEntity.ok().body(this.listGymToListDto(service.findByNameAndOpeningHours(name, gymOpeningTime)))
+    }
+
+    @GetMapping("$RESOURCE/payment", produces = [APPLICATION_JSON])
+    @ApiOperation(value = "Returns a list of gym with respective monthly fees")
+    @ApiResponse(code = 200, message = "Ok", response = GymDTO::class, responseContainer = "List")
+    fun findByPrice(
+        @RequestParam(required = true)
+        @ApiParam(value = "Initial price", example = "50.00", required = true)
+        initPrice: Double,
+        @RequestParam(required = true)
+        @ApiParam(value = "Final price", example = "150.00", required = true)
+        finalPrice: Double
+    ): ResponseEntity<List<GymDTO>> {
+        return ResponseEntity.ok(this.listGymToListDto(service.findByPriceBetween(initPrice, finalPrice)))
     }
 
     @GetMapping("$RESOURCE/{id}", produces = [APPLICATION_JSON])
@@ -66,7 +97,7 @@ class GymResource {
     @ApiResponse(code = 200, message = "Gym successfully deleted", response = Unit::class)
     fun deleteGym(
         @ApiParam(
-            value = "Id of customer account",
+            value = "Id of gym account",
             example = "4e4eeb3948198f4fdf3bfbb46a67aaa077e5f82a"
         )
         @PathVariable id: String

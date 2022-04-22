@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty
 import java.io.Serializable
 
 @ApiModel(value = "Customer")
-data class CustomerDTO(@ApiModelProperty(hidden = true) val customer: Customer) : Serializable {
+class CustomerDTO(customer: Customer) : Serializable {
 
     @ApiModelProperty(position = 0, example = "4e4eeb3948198f4fdf3bfbb46a67aaa077e5f82a", required = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

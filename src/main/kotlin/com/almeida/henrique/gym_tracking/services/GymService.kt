@@ -29,17 +29,17 @@ class GymService {
         return optional.orElseThrow { ObjectNotFoundException() }
     }
 
-    fun findByName(name: String): List<Gym> {
+    fun findByName(name: String?): List<Gym> {
         return repository.findByName(name, this.sortBy())
     }
 
     fun findByEmail(email: String): Gym = repository.findByEmail(email, this.sortBy("email"))
 
-    fun findByOpeningHours(openingHours: String): List<Gym> {
+    fun findByOpeningHours(openingHours: String?): List<Gym> {
         return repository.findByOpeningHours(openingHours, this.sortBy("openingHours"))
     }
 
-    fun findByNameAndOpeningHours(name: String, openingHours: String): List<Gym> {
+    fun findByNameAndOpeningHours(name: String?, openingHours: String?): List<Gym> {
         return repository.findByNameAndOpeningHours(name, openingHours, this.sortBy("name", "openingHours"))
     }
 
@@ -49,9 +49,9 @@ class GymService {
 
     fun insert(gym: Gym): Gym {
         try {
-            val id = this.findByEmail(gym.email).id
+           /* val id = this.findByEmail(gym.email).id
             val optional: Optional<Gym> = repository.findById(id)
-            if (!optional.isEmpty) return repository.insert(gym) else throw ObjectNotFoundException()
+            if (!optional.isEmpty) */return repository.insert(gym) /*else throw ObjectNotFoundException()*/
         } catch (e: DataBaseException) {
             throw DataBaseException("Database not connect")
         }
