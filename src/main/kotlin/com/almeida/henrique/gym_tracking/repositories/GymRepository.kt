@@ -26,6 +26,6 @@ interface GymRepository : MongoRepository<Gym, String> {
     @Query("{'email': ?0 }")
     fun findByEmail(@Param("email") email: String?): List<Gym>
 
-    @Query("{''monthlyPayment :{ \$gte: ?0, \$lte: ?1 } }")
+    @Query("{'monthlyPayment' :{ \$gte: ?0, \$lte: ?1 } }")
     fun findByPriceBetween(iniPrice: Double, finalPrice: Double, sort: Sort): List<Gym>
 }
