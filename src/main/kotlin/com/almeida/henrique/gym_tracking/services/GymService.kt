@@ -4,6 +4,7 @@ import com.almeida.henrique.gym_tracking.domain.Gym
 import com.almeida.henrique.gym_tracking.dto.GymDTO
 import com.almeida.henrique.gym_tracking.exception.DataBaseException
 import com.almeida.henrique.gym_tracking.exception.ObjectNotFoundException
+import com.almeida.henrique.gym_tracking.exception.ObjectRegistredExpection
 import com.almeida.henrique.gym_tracking.exception.ResourceNotFoundException
 import com.almeida.henrique.gym_tracking.repositories.GymRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,8 +34,6 @@ class GymService {
         return repository.findByName(name, this.sortBy())
     }
 
-    fun findByEmail(email: String): Gym = repository.findByEmail(email, this.sortBy("email"))
-
     fun findByOpeningHours(openingHours: String?): List<Gym> {
         return repository.findByOpeningHours(openingHours, this.sortBy("openingHours"))
     }
@@ -47,11 +46,16 @@ class GymService {
         return repository.findByPriceBetween(iniPrice, finalPrice, this.sortBy("monthlyPayment"))
     }
 
+    fun findByEmail(email: String?): List<Gym> = repository.findByEmail(email)
+
     fun insert(gym: Gym): Gym {
         try {
-           /* val id = this.findByEmail(gym.email).id
-            val optional: Optional<Gym> = repository.findById(id)
-            if (!optional.isEmpty) */return repository.insert(gym) /*else throw ObjectNotFoundException()*/
+            val listGyms = this.findByEmail(gym.email)
+
+            if (listGyms.isEmpty())
+                return repository.insert(gym)
+            else
+                throw ObjectRegistredExpection()
         } catch (e: DataBaseException) {
             throw DataBaseException("Database not connect")
         }
