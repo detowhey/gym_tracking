@@ -24,7 +24,7 @@ class ResourceExpectionHandler {
     }
 
     @ExceptionHandler(ObjectRegistredExpection::class)
-    fun registredObject(exception: DataBaseException, request: HttpServletRequest): ResponseEntity<StandardError> {
+    fun registredObject(exception: ObjectRegistredExpection, request: HttpServletRequest): ResponseEntity<StandardError> {
         return responseErrorEntity(
             HttpStatus.BAD_REQUEST,
             exception,

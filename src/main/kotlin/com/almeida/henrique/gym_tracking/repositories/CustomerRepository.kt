@@ -21,5 +21,5 @@ interface CustomerRepository : MongoRepository<Customer, String> {
     ): List<Customer>
 
     @Query("{'email': ?0 }")
-    fun findByEmail(@Param("email") email: String?): Customer
+    fun findByEmail(@Param("email") email: String?): List<Customer>
 }

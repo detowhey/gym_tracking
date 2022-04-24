@@ -51,14 +51,16 @@ class SwaggerConfig() {
     private fun responseMessagesGET(): ArrayList<Response> {
         return arrayListOf(
             ResponseBuilder().code("500").description("Internal server error").build(),
-            ResponseBuilder().code("404").description("Not found").build()
+            ResponseBuilder().code("404").description("Not found").build(),
+            ResponseBuilder().code("400").description("Bad Request").build()
         )
     }
 
     private fun responseMessagesPOST(): ArrayList<Response> {
         return arrayListOf(
             ResponseBuilder().code("500").description("Internal server error").build(),
-            ResponseBuilder().code("404").description("Not found").build()
+            ResponseBuilder().code("404").description("Not found").build(),
+            ResponseBuilder().code("400").description("Bad Request").build()
         )
     }
 
@@ -66,14 +68,16 @@ class SwaggerConfig() {
     private fun responseMessagesPUT(): ArrayList<Response> {
         return arrayListOf(
             ResponseBuilder().code("500").description("Internal server error").build(),
-            ResponseBuilder().code("404").description("Not found").build()
+            ResponseBuilder().code("404").description("Not found").build(),
+            ResponseBuilder().code("400").description("Bad Request").build()
         )
     }
 
     private fun responseMessagesDELETE(): ArrayList<Response> {
         return arrayListOf(
             ResponseBuilder().code("500").description("Internal server error").build(),
-            ResponseBuilder().code("404").description("Not found").build()
+            ResponseBuilder().code("404").description("Not found").build(),
+            ResponseBuilder().code("400").description("Bad Request").build()
         )
     }
 }
