@@ -6,6 +6,7 @@ import com.almeida.henrique.gym_tracking.services.GymService
 import io.swagger.annotations.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -108,7 +109,7 @@ class GymResource {
                 mapOf(
                     "id" to id,
                     "message" to "Gym successfully deleted",
-                    "status" to 200
+                    "status" to HttpStatus.ACCEPTED.value()
                 )
             )
     }
@@ -126,7 +127,7 @@ class GymResource {
             mapOf(
                 "id" to id,
                 "message" to "Gym data successfully updated",
-                "status" to 200
+                "status" to HttpStatus.ACCEPTED.value()
             )
         )
     }

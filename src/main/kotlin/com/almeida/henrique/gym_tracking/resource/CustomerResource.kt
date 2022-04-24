@@ -6,6 +6,7 @@ import com.almeida.henrique.gym_tracking.services.CustomerService
 import io.swagger.annotations.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -39,15 +40,6 @@ class CustomerResource {
         @ApiParam(value = "Id of customer account", example = "4e4eeb3948198f4fdf3bfbb46a67aaa077e5f82a")
         @PathVariable id: String
     ): ResponseEntity<CustomerDTO> = ResponseEntity.ok().body(CustomerDTO(service.findById(id)))
-
-    /*@GetMapping("$RESOURCE/email", produces = [APPLICATION_JSON])
-    @ApiOperation(value = "Returns the customer with this email")
-    @ApiResponse(code = 200, message = "Ok", response = CustomerDTO::class, responseContainer = "Map")
-    fun findByEmail(
-        @RequestParam(required = true)
-        @ApiParam(value = "Email of customer", example = "example@email.com", required = true)
-        email: String
-    ) = ResponseEntity.ok().body(CustomerDTO(service.findByEmail(email)))*/
 
     @GetMapping(RESOURCE, produces = [APPLICATION_JSON])
     @ApiOperation(value = "Returns a list of customers")
@@ -100,7 +92,7 @@ class CustomerResource {
                 mapOf(
                     "id" to id,
                     "message" to "Customer successfully deleted",
-                    "status" to 200
+                    "status" to HttpStatus.ACCEPTED.value()
                 )
             )
     }
@@ -123,7 +115,7 @@ class CustomerResource {
             mapOf(
                 "id" to id,
                 "message" to "Customer successfully updated",
-                "status" to 200
+                "status" to HttpStatus.ACCEPTED.value()
             )
         )
     }

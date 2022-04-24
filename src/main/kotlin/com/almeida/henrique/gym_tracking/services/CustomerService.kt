@@ -4,7 +4,7 @@ import com.almeida.henrique.gym_tracking.domain.Customer
 import com.almeida.henrique.gym_tracking.dto.CustomerDTO
 import com.almeida.henrique.gym_tracking.exception.DataBaseException
 import com.almeida.henrique.gym_tracking.exception.ObjectNotFoundException
-import com.almeida.henrique.gym_tracking.exception.ObjectRegistredExpection
+import com.almeida.henrique.gym_tracking.exception.ObjectRegisteredException
 import com.almeida.henrique.gym_tracking.exception.ResourceNotFoundException
 import com.almeida.henrique.gym_tracking.repositories.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,7 +47,7 @@ class CustomerService {
             if (listCustomers.isEmpty())
                 return repository.insert(customer)
             else
-                throw ObjectRegistredExpection()
+                throw ObjectRegisteredException("Email already registered")
         } catch (e: DataBaseException) {
             throw DataBaseException("Database not connect")
         }
